@@ -17,6 +17,7 @@ import {
   Text,
   useColorScheme,
   View,
+  Linking,
 } from 'react-native';
 
 import {
@@ -61,6 +62,20 @@ const App = () => {
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
+
+  const handleDeeplink = (url: string) => console.log('deeplink url is: ', url);
+
+  React.useEffect(() => {
+    Linking.getInitialURL().then(url => {
+      console.log('[getInitialURL] ran');
+      url ? handleDeeplink(url) : console.log('[getInitialURL] no url');
+    });
+
+    Linking.addEventListener('url', ({url}) => {
+      console.log('[urlEventListener] ran');
+      url ? handleDeeplink(url) : console.log('[urlEventListener] no url');
+    });
+  }, []);
 
   return (
     <SafeAreaView style={backgroundStyle}>
